@@ -1,0 +1,48 @@
+{
+	"compiler": {
+		"version": "0.6.0+commit.26b70077"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "createOffer",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contract.sol": "MyContract"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contract.sol": {
+			"keccak256": "0xb6a7b70aeb6bc304794ebdcc797fa4d0c574303a6402a181591e19be104ca4ac",
+			"urls": [
+				"bzz-raw://970ae6b2dc9b4a57dd9d8da7d070d88056f20c5cd1f1236bf7f585988a10d94f",
+				"dweb:/ipfs/QmUsy49XffCUnb9XcU3nrLt4e2hqBwoHUXPw6BdztENMEs"
+			]
+		}
+	},
+	"version": 1
+}
