@@ -5,7 +5,6 @@ contract MyContract {
 
     uint public numberOfOffer;
     uint public orderID;
-    address[] public buyersAddresses; // stores the addresses of buyers
 
 
     struct offerModel {
@@ -19,6 +18,7 @@ contract MyContract {
         uint itemPrice;
 
     }
+
 
     // we map a unique ID for each offer
     mapping (uint => offerModel) public offers;
@@ -34,17 +34,23 @@ contract MyContract {
         offers[numberOfOffer].itemName = _itemName;
         offers[numberOfOffer].itemSpecification = _itemSpecification;
         offers[numberOfOffer].itemPrice = _itemPrice;
-
     }
 
-    // function searchOffers (string _itemName) public view returns(offerModel memory) {
-    //     for(uint i=0;i<numberOfOffer;i++)
-    //     {
-    //         if(keccak256(offers[i].itemName) == keccak256(_itemName)){
-    //             return offers[i];
-    //         }
-    //     }
-    // }
+     function searchOffers (string _itemName, string _itemSpecification) public view returns(string memory) {
+         uint minValue = 1000000000;
+         uint itemIndex;
+         for(uint i=0;i<numberOfOffer;i++)
+         {
+             if((keccak256(offers[i].itemName) == keccak256(_itemName)) && (keccak256(offers[i].itemSpecification) == keccak256(_itemSpecification))){
+                 if(minValue > offers[i].itemPrice){
+                    minValue = offers[i].itemPrice;
+                    itemIndex = i;
+                 }
+             }
+         }
+
+         return offers[itemIndex].sellerName;
+    }
 
 
     function getAllOffers() external view returns (offerModel[] memory) {
@@ -69,12 +75,13 @@ contract MyContract {
     }
 
     mapping (uint => buyerModel) public orders;
+    mapping (uint => buyerModel) public minOffer;
 
     
     
-    function placeOrder (uint _offerID , uint _orderCount, string _buyerAddress) external payable {
+    function placeOrder (uint _offerID , uint _orderCount, string _buyerAddress) external payable{
         require(offers[_offerID].itemRemaining > 0);        
-        require(msg.value == (offers[_offerID].itemPrice * _orderCount));
+        require(msg.value >= (offers[_offerID].itemPrice * _orderCount));
         orderID++;
         offers[_offerID].itemRemaining = offers[_offerID].itemRemaining - _orderCount;
         orders[orderID].orderID = orderID;
@@ -83,13 +90,15 @@ contract MyContract {
         orders[orderID].itemName = offers[_offerID].itemName;
         orders[orderID].itemSpecification = offers[_offerID].itemSpecification;
         orders[orderID].itemPrice = offers[_offerID].itemPrice;
-        if(offers[_offerID].itemRemaining == 0){
-            address payable _seller = offers[_offerID].sellerWalletAddress;
-            _seller.transfer(offers[_offerID].itemPrice * offers[_offerID].itemCount);
-        }
         
+        if(offers[_offerID].itemRemaining == 0){         
+         offers[_offerID].sellerWalletAddress.transfer(offers[_offerID].itemCount * offers[_offerID].itemPrice);         
+         }
+    }
+    function test23() external view returns(uint){
+        return address(this).balance;
 
     }
 
-
+    
 }
